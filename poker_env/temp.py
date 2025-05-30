@@ -71,14 +71,13 @@ class Game:
         else:
             print("Failed starting hand")
             print(f"Game is {self.game.game_state}")
-            print(f"Player chips are {[self.game.players[i].chips for i in range(len(self.game.players))]}")
             return False
             
 if __name__ == "__main__":
     
     agents = [RandomAgent() for _ in range(6)]
     game = Game(agents, 6)
-    for i in range(50):
+    for i in range(30):
         print(f"Playing Hand {i}")
         if not game.play_hand():
             print("Game over")

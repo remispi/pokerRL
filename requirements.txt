@@ -7,6 +7,7 @@ configparser==7.2.0
 Deprecated==1.2.18
 idna==3.10
 lxml==5.3.2
+numpy==2.2.6
 parsedatetime==2.6
 pathlib==1.0.1
 python-dateutil==2.9.0.post0
@@ -15,6 +16,7 @@ requests==2.32.3
 setuptools==79.0.0
 six==1.17.0
 texasholdem==0.11.0
+tinygrad==0.10.3
 urllib3==2.4.0
 wrapt==1.17.2
 zope.interface==7.2
