@@ -4,26 +4,12 @@ import random
 from abc import ABC, abstractmethod
 from texasholdem import TexasHoldEm, ActionType, History
 
-# Action types
-FOLD = 0
-CHECK = 1
-CALL = 2
-RAISE = 3
-
-# Betting states
-
-PREFLOP = 0
-FLOP = 1
-TURN = 2
-RIVER = 3
-SHOWDOWN = 4
-
 generator = np.random.default_rng()
 
 def truncated_exponential(scale = 0.1):
-    amount = generator.exponential(scale=3)
+    amount = generator.exponential(scale)
     while amount > 1:
-        amount = generator.exponential(scale=3)
+        amount = generator.exponential(scale)
     return amount
 
 class Agent(ABC): 

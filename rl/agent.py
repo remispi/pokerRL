@@ -28,6 +28,12 @@ class NeuralAgent():
                 raise ValueError("Suit not in {1,2,4,8}")
                 
 
+    def hole_embedding(self, cards: tuple[texasholdem.Card, texasholdem.Card]):#
+        assert cards[0] != cards[1],  "Hole has the same card twice"
+        embedding = np.zeros((4,13), dtype=np.float32)
+        embedding[self._suit_to_int(cards[0].suit), cards[0].rank] = 1
+        embedding[self._suit_to_int(cards[1].suit), cards[1].rank] = 1
+         
     def card_embedding(self, card: texasholdem.Card) -> Tensor:
         rank:int = card.rank
         suit:int = self._suit_to_int(card.suit)
@@ -46,14 +52,16 @@ class NeuralAgent():
             case None:
                 action_value = Tensor(0)
             case _:
-                action_value = (Tensor(action.value / self.game.big_blind) + 1).log2().realize()
+                action_value = (Tensor(1 + (action.value / self.game.big_blind))).log()
         bet += action_type.pad((0,1)).numpy()
         bet[5] = action_value.item()
         bet = Tensor(bet)
         print(player_id.numpy()) 
         print(bet.numpy())
         return player_id.cat(bet)
+    
     def actions_embedding(self, actions: Sequence[texasholdem.PlayerAction]):
+        
         assert(len(actions) <= 6)
         for action in actions:
             player_id = action.player_id
