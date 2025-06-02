@@ -3,6 +3,39 @@ import numpy as np
 import random
 from abc import ABC, abstractmethod
 from texasholdem import TexasHoldEm, ActionType, History
+from pettingzoo import AECEnv
+import gymnasium
+from gymnasium.utils import seeding
+from pettingzoo.utils import AgentSelector
+
+class raw_env(AECEnv):
+    metadata = {"render_modes": ["human"], "name" : "nlhe_v0"}
+    def __init__(self, render_mode = None):
+        self.possible_agents = [f"player_{i}" for i in range(6)]
+        self.agent_name_mapping = dict(enumerate(self.possible_agents))
+        self.render_mode = render_mode
+        
+    def reset(self, seed=None, options=None):
+        self.np_random, self.np_random_seed = seeding.np_random(seed)
+        self.agents = self.possible_agents[:]
+        self.rewards = {agent : 0 for agent in self.agents}
+        self._cumulative_rewards = {agent : 0 for agent in self.agents}
+        self.terminations = {agent : False for agent in self.agents}
+        self.trunctations = {agent : False for agent in self.agents}
+        self.infos = {agent : {} for agent in self.agents}
+        self.num_moves = 0
+        self._agent_selector = AgentSelector(self.agents)
+        self.agent_selection = self._agent_selector.next()
+        if options is None: 
+            options = {}
+        self.game = TexasHoldEm( \
+            buyin=options.get("buyin", 500),
+            big_blind=options.get("big_blind", 10),
+            small_blind=options.get("small_blind", 5),
+            max_players=6,
+        )
+        
+    
 
 generator = np.random.default_rng()
 
